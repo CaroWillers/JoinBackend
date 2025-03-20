@@ -130,58 +130,66 @@ function togglePrivacyPolicyCheckbox(buttonElement) {
  * @async
  * @returns {Promise<void>}
  */
-async function registerUser() {
+async function addUser(event) {
+    event.preventDefault(); // Prevents the default form submission
+
     let formData = getSignupFormValues();
+
     if (!await validateFormData(formData)) {
         return;
     }
 
     try {
-        let response = await fetch(`${API_URL}/register/`, {
+        let response = await fetch(`${API_URL}/auth/signup/`, { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
         });
-
-        let data = await response.json();
+ 
         if (response.ok) {
-            saveUserSession(data, formData.rememberMe);
+            console.log("User erfolgreich registriert!");
             successfulSignup();
         } else {
-            alert(data.error || "Registrierung fehlgeschlagen.");
+            console.error("Registrierung fehlgeschlagen:", formData);
+            alert(`Registrierung fehlgeschlagen: ${JSON.stringify(formData)}`);
         }
     } catch (error) {
         console.error("Fehler bei der Registrierung:", error);
     }
 }
 
+
 /**
  * Retrieves values from the signup form fields.
  */
 function getSignupFormValues() {
     return {
-        name: document.getElementById("name").value.trim(),
+        username: document.getElementById("name").value.trim(),  
         email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value,
-        confirmPassword: document.getElementById("confirm_password").value,
-        rememberMe: document.getElementById("rememberCheckbox").checked
+        password: document.getElementById("password").value, 
+        confirm_password: document.getElementById("confirm_password").value.trim(),   
     };
 }
+
 
 /**
  * Validates form fields and email before signup.
  */
-async function validateFormData({ name, email, password, confirmPassword }) {
-    return validateFormFields(name, email, password, confirmPassword) &&
-           await checkEmailExistence() &&
-           checkPrivacyPolicy();
+async function validateFormData({ username, email, password, confirm_password }) {
+    let isValid = validateFormFields(username, email, password, confirm_password) &&
+                  await checkEmailExistence() &&
+                  checkPrivacyPolicy();
+
+    console.log("🔍 Validation Result:", isValid);
+    return isValid;
 }
+
 
 /**
  * Validates if form fields are filled correctly.
  */
-function validateFormFields(name, email, password, confirmPassword) {
-    if (!name || !email || !password || !confirmPassword) {
+function validateFormFields(username, email, password, confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
         alert("Bitte fülle alle Felder aus.");
         return false;
     }
@@ -195,18 +203,6 @@ function validateFormFields(name, email, password, confirmPassword) {
     return true;
 }
 
-/**
- * Saves user session in localStorage.
- */
-function saveUserSession(data, rememberMe) {
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("currentUserName", data.name);
-    localStorage.setItem("userType", "regular");
-
-    if (rememberMe) {
-        localStorage.setItem("rememberedEmail", data.email);
-    }
-}
 
 /**
  * Displays a signup success message and redirects to login.
@@ -217,6 +213,6 @@ function successfulSignup() {
 
     setTimeout(() => {
         signupModal.style.display = "none";
-        window.location.href = "./login.html";
-    }, 2000);
+        window.location.href = "login.html";
+    }, 5000);
 }

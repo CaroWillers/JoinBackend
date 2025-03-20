@@ -719,8 +719,7 @@ input::placeholder {
 }
 
 .signupContent {
-    max-width: 650px;
-    width: 100%;
+    width: 60%;
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -909,8 +908,7 @@ input::placeholder {
     }
 
     .signupContent {
-        max-width: 650px;
-        padding: 20px 10px;
+        padding: 10px 10px;
     }
 
     .acceptPolicy {
@@ -928,8 +926,7 @@ input::placeholder {
 
 @media (max-width: 540px) {
     .signupContent {
-        max-width: 500px;
-        max-height: 450px;
+        max-width: 500px; 
         padding: 20px 10px;
         margin-top: 20px;
     }
@@ -991,9 +988,9 @@ input::placeholder {
     }
 
     .signupContent {
+        max-height: 600px;
         max-width: 370px;
-        padding: 20px;
-        margin-top: -40px;
+        padding: 20px; 
     }
 
     .headlineContainer {

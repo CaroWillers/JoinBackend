@@ -1,7 +1,11 @@
 from django.urls import path
-from user_auth.api.views import UserListView, UserDetailView
+from rest_framework_simplejwt.views import TokenRefreshView
+from .views import SignupView, LoginView, LogoutView, CheckEmailView 
 
 urlpatterns = [
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('check-email/', CheckEmailView.as_view(), name='check_email'),  
 ]
