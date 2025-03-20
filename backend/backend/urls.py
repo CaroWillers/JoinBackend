@@ -20,10 +20,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include('user_auth.api.urls')),   
-    path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/auth/logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
+    
+    # Eigene Auth-Routen (user_auth.api.urls enthält LoginView, SignupView, etc.)
+    path('api/', include('user_auth.api.urls')),
+
+    # Standard JWT-Token-Authentifizierung 
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
+
     path('api/', include('contacts.api.urls')),
     path('api/', include('tasks.api.urls')),
 ]

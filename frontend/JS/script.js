@@ -5,12 +5,16 @@
  * If not, it starts an animation and redirects to the login page.
  * If logged in, it loads user data, tasks, contacts, and other necessary data.
  */
+/**
+ * Initializes the application after a startup animation.
+ */
 async function init() {
-    if (!localStorage.getItem("isLoggedIn")) {
-        insertAnimation();
-        await startAnimation();
-    } else {
-        await hideStartAnimation();
+    let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) { 
+        await startAnimation(); 
+        window.location.href = "login.html";
+    } else { 
         await fetchUserData();
         await mobileGreeting();
         await loadTasks();
@@ -20,14 +24,18 @@ async function init() {
     }
 }
 
+
 /**
  * Fetches user data from the backend based on stored authentication token.
  */
 async function fetchUserData() {
     try {
-        let token = localStorage.getItem("authToken");
+        let token = localStorage.getItem("accessToken"); // FIX: Richtiger Token-Name
+        console.log("🔎 Überprüfe Token:", token);
+
+
         if (!token) {
-            logout();
+            console.log("Kein Token gefunden. Nutzer wird ausgeloggt.");
             return;
         }
 
@@ -37,6 +45,7 @@ async function fetchUserData() {
         });
 
         if (!response.ok) {
+            console.log("Token ungültig. Nutzer wird ausgeloggt.");
             logout();
             return;
         }
@@ -54,7 +63,7 @@ async function fetchUserData() {
  */
 async function hideStartAnimation() {
     let overlay = document.getElementById("overlay");
-    if (localStorage.getItem("isLoggedIn")) {
+    if (overlay && (localStorage.getItem("isLoggedIn") === "true" || sessionStorage.getItem("isLoggedIn") === "true")) {
         overlay.classList.add("d-none");
     }
 }
@@ -76,8 +85,10 @@ function insertAnimation() {
 async function startAnimation() {
     return new Promise((resolve) => {
         setTimeout(() => {
-            window.location.href = "login.html";
-            document.getElementById("overlay").classList.add("d-none");
+            if (localStorage.getItem("isLoggedIn") !== "true" && sessionStorage.getItem("isLoggedIn") !== "true") {
+                console.log("Kein User eingeloggt. Leite zur Login-Seite um...");
+                window.location.href = "login.html";
+            }
             resolve();
         }, 1200);
     });
@@ -87,8 +98,9 @@ async function startAnimation() {
  * Displays a greeting message based on the current time of day.
  */
 function greetUser() {
-    let userName = localStorage.getItem("currentUserName") || "Guest";
-    let greetingElement = document.getElementById("greeting");
+    const userType = localStorage.getItem("userType") || sessionStorage.getItem("userType") || "guest";
+    const userName = localStorage.getItem("currentUserName") || sessionStorage.getItem("currentUserName") || "Guest";
+    const greetingElement = document.getElementById("greeting");
 
     let currentHour = new Date().getHours();
     let greetingText =
@@ -96,7 +108,11 @@ function greetUser() {
         currentHour < 18 ? "Good afternoon" :
         "Good evening";
 
-    greetingElement.textContent = `${greetingText}, ${userName}!`;
+    if (greetingElement) {
+        greetingElement.textContent = userType === "guest"
+            ? `${greetingText}, dear guest!`
+            : `${greetingText}, ${userName}!`;
+    }
 }
 
 /**
@@ -287,9 +303,12 @@ function removeNavHighlightOnLogo() {
  * Logs out the user and clears local storage.
  */
 function logout() {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("currentUserName");
-    localStorage.removeItem("userEmail");
-    window.location.href = "login.html";
+    console.log("Nutzer wird ausgeloggt...");
+
+    ["isLoggedIn", "accessToken", "refreshToken", "currentUserName", "userEmail", "userType"]
+        .forEach(item => localStorage.removeItem(item));
+
+    sessionStorage.clear();
+    
+    window.location.href = "login.html"; 
 }

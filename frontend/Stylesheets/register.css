@@ -720,6 +720,7 @@ input::placeholder {
 
 .signupContent {
     width: 60%;
+    max-width: 750px;
     padding: 20px;
     display: flex;
     justify-content: center;

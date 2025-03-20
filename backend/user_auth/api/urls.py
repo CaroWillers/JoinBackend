@@ -4,8 +4,8 @@ from .views import SignupView, LoginView, LogoutView, CheckEmailView
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(), name='login'),   
     path('logout/', LogoutView.as_view(), name='logout'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('check-email/', CheckEmailView.as_view(), name='check_email'),  
+    path('check-email/', CheckEmailView.as_view(), name='check_email'),
 ]
