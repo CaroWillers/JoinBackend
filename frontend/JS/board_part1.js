@@ -4,40 +4,64 @@
 let cards = []
 
 /**
- * Loads tasks from local storage.
+ * Loads tasks from the backend via REST API.
  * 
- * @returns {Promise<Array<object>>} A promise that resolves to an array of tasks or an empty array if no tasks are found.
+ * @returns {Promise<Array<object>>} A promise that resolves to an array of tasks or an empty array if loading fails.
  */
 async function loadTasks() {
     try {
-        let result = await getItem('cards');
-        if (result) {
-            cards = JSON.parse(result);
-            return cards;
-        } else {
-            console.log("No cards found in storage, returning empty array.");
-            return [];
-        }
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`${API_URL}/tasks/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Fehler beim Laden der Tasks.");
+        cards = await response.json();
     } catch (e) {
-        console.error('Loading error:', e);
-        return [];
+        console.error("Loading error:", e);
+        cards = [];
     }
 }
 
 /**
- * Saves the current tasks array to local storage.
+ * Updates the remote storage (backend) with the current task cards.
  * 
- * @returns {Promise<void>} A promise that resolves after saving the tasks.
+ * @returns {Promise<void>}
  */
 async function UpdateTaskInRemote() {
-    await setItem('cards', cards);
+    try {
+        const token = localStorage.getItem("authToken");
+
+        for (let card of cards) {
+            const response = await fetch(`${API_URL}/tasks/${card.id}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify(card),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fehler beim Aktualisieren von Task ${card.id}`);
+            }
+        }
+    } catch (error) {
+        console.error("Fehler beim Speichern in Remote:", error);
+    }
 }
+
 
 /**
  * Asynchronously loads all necessary functions for the board in the correct order.
  */
 async function loadBoard() {
     await Templates('board');
+    await loadTasks();
     updateCards();
     changeNavigation()
 }

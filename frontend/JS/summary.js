@@ -9,11 +9,23 @@
  * @async
  */
 async function summaryLoad() {
-    await Templates('summary');
-    summaryLoadNumbers();
-    changeNavigationHighlightSummary();
-    greetUser()
+    await Templates('summary'); // Lade die Summary-Template
+
+    // 🔄 Warte, bis die Elemente wirklich im DOM existieren
+    setTimeout(() => {
+        if (!document.getElementById("to-do-number")) {
+            console.warn("⚠️ summaryLoad: Elemente fehlen noch. Warte 500ms...");
+            setTimeout(summaryLoad, 500);
+            return;
+        }
+
+        console.log("✅ summaryLoad: Alle Elemente gefunden!");
+        summaryLoadNumbers();
+        changeNavigationHighlightSummary();
+        greetUser();
+    }, 300);
 }
+
 
 /**
  * Highlights the summary navigation element and removes highlights from legal sections.
@@ -24,8 +36,17 @@ async function summaryLoad() {
  */
 function changeNavigationHighlightSummary() {
     let summary = document.getElementById('navSummary');
+
+    // Falls `navSummary` nicht existiert, warte 300ms und versuche es nochmal
+    if (!summary) {
+        console.warn("⚠️ changeNavigationHighlightSummary: #navSummary existiert nicht. Warte 300ms...");
+        setTimeout(changeNavigationHighlightSummary, 300);
+        return;
+    }
+
     let privacyPolicy = document.getElementById('navPrivacyPolicy');
     let legalNotice = document.getElementById('navLegalNotice');
+
     summary.classList.add('navigation-item-clicked');
     legalNotice.classList.remove('navigation-legal-clicked');
     privacyPolicy.classList.remove('navigation-legal-clicked');
@@ -34,13 +55,19 @@ function changeNavigationHighlightSummary() {
         summary.children[0].classList.add('d-none');
         summary.children[1].classList.remove('d-none');
     }
-
 }
+
 
 /**
  * Calls functions to retrieve and display the number of tasks in each list ("todo", "progress", "feedback", "done").
  */
 function summaryLoadNumbers() {
+    if (!cards || cards.length === 0) {
+        console.warn("⚠️ Keine Aufgaben gefunden. Lade später erneut...");
+        setTimeout(summaryLoadNumbers, 500);
+        return;
+    }
+    
     todoNumber();
     progressNumber();
     feedbackNumber();
@@ -49,6 +76,7 @@ function summaryLoadNumbers() {
     urgentNumber();
     displayClosestDueDate();
 }
+
 
 /**
  * Calculates and displays the number of tasks in the "todo" list.

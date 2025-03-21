@@ -1,6 +1,6 @@
 from rest_framework import generics
 from contacts.models import Contact
-from contacts.api.serializers import ContactSerializer
+from .serializers import ContactSerializer
 
 class ContactListCreateView(generics.ListCreateAPIView):
     queryset = Contact.objects.all()

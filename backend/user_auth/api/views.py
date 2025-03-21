@@ -8,6 +8,8 @@ from user_auth.models import CustomUser
 from user_auth.api.serializers import UserSerializer
 from django.http import JsonResponse
 from datetime import timedelta
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 # Signup-View
 class SignupView(APIView):
@@ -79,3 +81,17 @@ class CheckEmailView(APIView):
 
         email_exists = CustomUser.objects.filter(email=email).exists()
         return Response({"exists": email_exists})
+
+ 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    """
+    Gibt die Daten des eingeloggten Benutzers zurück.
+    """
+    user = request.user
+    return Response({
+        "id": user.id,
+        "username": user.username,
+        "email": user.email
+    })

@@ -21,10 +21,13 @@ async function loadContacts() {
  */
 async function loadRemoteContactsOfLoggedInUser() {
     try {
-        let token = localStorage.getItem("authToken");
+        let token = localStorage.getItem("authToken");   
         let response = await fetch(`${API_URL}/contacts/`, {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`  
+            }
         });
 
         if (!response.ok) throw new Error("Fehler beim Laden der Kontakte.");
@@ -35,6 +38,7 @@ async function loadRemoteContactsOfLoggedInUser() {
         return [];
     }
 }
+
 
 /**
  * Checks if the current user is already added as a contact in the local contacts list.
@@ -54,28 +58,34 @@ async function checkIfUserIsAddedAsContact() {
  */
 async function createUserAsContact() {
     let newContact = {
-        name: currentUser,
-        email: userEmail || 'guest@guestmail.com',
-        phone: '+49',
-        avatarColor: avatarColors[Math.floor(Math.random() * avatarColors.length)]
+        name: currentUser.split(" ")[0],
+        surname: currentUser.split(" ")[1] || "",
+        initials: currentUser.charAt(0).toUpperCase() + (currentUser.split(" ")[1]?.charAt(0).toUpperCase() || ""),
+        avatarColor: avatarColors[Math.floor(Math.random() * avatarColors.length)],
+        category: currentUser.charAt(0).toUpperCase(),
+        email: userEmail || "guest@guestmail.com",
+        phone: "+49"
     };
 
     try {
-        const response = await fetch(`${API_BASE_URL}/contacts/`, {
+        let token = localStorage.getItem("authToken");
+        const response = await fetch(`${API_URL}/contacts/`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`
             },
             body: JSON.stringify(newContact)
         });
 
         if (!response.ok) throw new Error("Fehler beim Erstellen des Kontakts.");
         console.log("Kontakt erfolgreich erstellt.");
-        await loadRemoteContactsOfLoggedInUser(); // Kontakte neu laden
+        await loadRemoteContactsOfLoggedInUser();  // Aktualisieren
     } catch (error) {
         console.error("Fehler beim Erstellen des Kontakts:", error);
     }
 }
+
 
 /**
  * Updates the remote storage with the current list of user contacts.

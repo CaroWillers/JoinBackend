@@ -9,18 +9,20 @@
  * Initializes the application after a startup animation.
  */
 async function init() {
-    let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    let isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || localStorage.getItem("isLoggedIn") === true;
+    console.log("🔍 isLoggedIn Wert:", isLoggedIn);
 
-    if (!isLoggedIn) { 
-        await startAnimation(); 
+    if (!isLoggedIn) {
+        await startAnimation();
         window.location.href = "login.html";
-    } else { 
+    } else {
         await fetchUserData();
         await mobileGreeting();
         await loadTasks();
         await summaryLoad();
         await loadRemoteContactsOfLoggedInUser();
         greetUser();
+        setTimeout(hideStartAnimation, 500);
     }
 }
 
@@ -30,31 +32,29 @@ async function init() {
  */
 async function fetchUserData() {
     try {
-        let token = localStorage.getItem("accessToken"); // FIX: Richtiger Token-Name
-        console.log("🔎 Überprüfe Token:", token);
-
+        const token = localStorage.getItem("access_token");
 
         if (!token) {
-            console.log("Kein Token gefunden. Nutzer wird ausgeloggt.");
-            return;
+            console.warn("Kein Token. Weiterleitung.");
+            return logout();
         }
 
-        let response = await fetch(`${API_URL}/auth/user/`, {
+        const response = await fetch(`${API_URL}/user/`, {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         if (!response.ok) {
-            console.log("Token ungültig. Nutzer wird ausgeloggt.");
-            logout();
-            return;
+            console.warn("Token ungültig. Weiterleitung.");
+            return logout();
         }
 
-        let userData = await response.json();
-        localStorage.setItem("currentUserName", userData.name);
+        const userData = await response.json();
+        localStorage.setItem("currentUserName", userData.username);
         localStorage.setItem("userEmail", userData.email);
-    } catch (error) {
-        console.error("Fehler beim Laden des Benutzers:", error);
+
+    } catch (err) {
+        console.error("Fehler beim Benutzerladen:", err);
     }
 }
 
@@ -149,7 +149,7 @@ function greetUserMobile() {
  * Updates the greeting based on whether the user is a guest or a registered user.
  */
 function GuestOrUser(greetingElement, userName, greetingText) {
-    if (userName === "Guest") {
+    if (greetingElementUser) {
         greetingElement.textContent = `${greetingText}`;
     } else {
         let greetingElementUser = document.getElementById("greeting-mobile-user");
@@ -180,9 +180,20 @@ async function includeHTML() {
  */
 async function Templates(template) {
     const content = document.getElementById("content");
+
+    if (!content) {
+        console.warn("⚠️ Templates: #content existiert nicht – bist du noch auf login.html?");
+        return;
+    }
+
     content.innerHTML = `<div class="template-container" include-html="./Templates/${template}.html"></div>`;
     await includeHTML();
+
+    return new Promise((resolve) => {
+        requestAnimationFrame(() => resolve());
+    });
 }
+
 
 /**
  * Opens and closes navigation dropdowns.
@@ -305,7 +316,7 @@ function removeNavHighlightOnLogo() {
 function logout() {
     console.log("Nutzer wird ausgeloggt...");
 
-    ["isLoggedIn", "accessToken", "refreshToken", "currentUserName", "userEmail", "userType"]
+    ["isLoggedIn", "access_token", "refresh_token", "currentUserName", "userEmail", "userType"]
         .forEach(item => localStorage.removeItem(item));
 
     sessionStorage.clear();

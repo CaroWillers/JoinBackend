@@ -200,8 +200,7 @@ async function addUser() {
         throw new Error(data.error || "Registrierung fehlgeschlagen");
     }    
 
-
-    alert("Registrierung erfolgreich! Bitte logge dich ein.");
+    //alert("Registrierung erfolgreich! Bitte logge dich ein.");
     successfulSignup();
 } catch (error) {
     console.error("Fehler bei der Registrierung:", error.message);

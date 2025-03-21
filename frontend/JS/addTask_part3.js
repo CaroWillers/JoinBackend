@@ -4,20 +4,38 @@
  * If validation fails, it displays error messages and exits.
  * Otherwise, it adds the new task to the board, resets the form, and displays a success popup.
  */
-function createTask() {
+async function createTask() {
     let taskData = getTaskData();
-    let id = giveId();
-    let place = boardPlace === "" ? 'todo' : boardPlace;
-    if (!validateTaskData(taskData)) {
-        return;
+    if (!validateTaskData(taskData)) return;
+
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_URL}/tasks/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`
+            },
+            body: JSON.stringify({
+                title: taskData.title,
+                description: taskData.description,
+                due_date: taskData.dueDate,
+                priority: taskData.priority,
+                category: taskData.category,
+                assigned: taskData.assigned,
+                subtasks: taskData.subtasks
+            })
+        });
+
+        if (!response.ok) throw new Error("Task konnte nicht erstellt werden.");
+
+        showTaskCreatedPopUp();
+        resetCreateTaskFormInputs();
+    } catch (error) {
+        console.error("Fehler beim Erstellen des Tasks:", error);
     }
-    let priorityImg = getPriorityImagePath(taskData.priority);
-    let categoryColor = getCategoryColor(taskData.category);
-    let newCard = buildTemplateForArrayInput(id, place, taskData.category, categoryColor, taskData.title, taskData.description, taskData.dueDate, taskData.subtasks, taskData.assigned, taskData.priority, priorityImg);
-    addTaskToBoard(newCard);
-    resetCreateTaskFormInputs();
-    CreatedPopUpOptions();
 }
+
 
 /**
  * Generates a unique ID for a new card.

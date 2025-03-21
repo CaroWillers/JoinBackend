@@ -26,7 +26,7 @@ async function login() {
     let rememberMe = document.getElementById('rememberCheckbox').checked;
 
     if (!email || !password) {
-        alert("Bitte geben Sie eine gültige E-Mail und ein Passwort ein.");
+        alert("Bitte E-Mail und Passwort eingeben.");
         return;
     }
 
@@ -46,7 +46,7 @@ async function login() {
         console.log("Login erfolgreich:", data);
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
-        setUserLogin({ name: data.user.username });
+        setUserLogin({ name: data.user.username }, { access: data.access, refresh: data.refresh });
 
         if (rememberMe) {
             await rememberPassword(email, password, true);
@@ -81,30 +81,44 @@ function clearPasswordError() {
 /**
  * Displays the login modal.
  */
-function successfulLogin() {
+async function successfulLogin() {
     let loginModal = document.getElementById("loginModal");
     if (loginModal.style.display !== "block") {
         loginModal.style.display = "block";
 
-        setTimeout(function() {
+        setTimeout(async function() {
             if (loginModal.style.display === "block") {
                 loginModal.style.display = "none";
-                window.location.href = './index.html';
-                greetUser();
+ 
+                window.location.href = "index.html";
+
+                // 🕒 Warten, bis die neue Seite geladen ist, dann Funktionen ausführen
+                setTimeout(async () => {
+                    await fetchUserData();
+                    await loadTasks();
+                    await loadRemoteContactsOfLoggedInUser();
+                    await summaryLoad();
+                }, 500); // 500ms warten, um sicherzustellen, dass `#content` existiert
             }
         }, 2000);
     }
 }
 
+
 /**
  * Sets up the user session in localStorage with the user's information.
  * @param {Object} user - The user object with at least a 'name' property.
  */
-function setUserLogin(user) {
+function setUserLogin(user, tokens) {
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('currentUserName', user.name);
     localStorage.setItem('userType', 'regular');
+
+    // Token speichern
+    localStorage.setItem('access_token', tokens.access);
+    localStorage.setItem('refresh_token', tokens.refresh);
 }
+
 
 /**
  * Speichert das Passwort im localStorage, wenn "Angemeldet bleiben" aktiv ist.

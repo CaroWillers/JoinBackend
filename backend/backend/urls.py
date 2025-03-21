@@ -29,6 +29,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
 
-    path('api/', include('contacts.api.urls')),
-    path('api/', include('tasks.api.urls')),
+    path('api/contacts/', include('contacts.api.urls')),
+    path('api/tasks/', include('tasks.api.urls')),
 ]
