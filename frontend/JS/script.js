@@ -20,7 +20,7 @@ async function init() {
         await mobileGreeting();
         await loadTasks();
         await summaryLoad();
-        await loadRemoteContactsOfLoggedInUser();
+        await loadRemoteContacts();
         greetUser();
         setTimeout(hideStartAnimation, 500);
     }
@@ -149,7 +149,7 @@ function greetUserMobile() {
  * Updates the greeting based on whether the user is a guest or a registered user.
  */
 function GuestOrUser(greetingElement, userName, greetingText) {
-    if (greetingElementUser) {
+    if (userName === 'Gast') {
         greetingElement.textContent = `${greetingText}`;
     } else {
         let greetingElementUser = document.getElementById("greeting-mobile-user");

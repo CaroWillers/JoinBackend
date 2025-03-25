@@ -52,7 +52,7 @@
     padding: 15px 24px 15px 24px;
 }
 
-.contactAvatar {
+.avatar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,6 +236,34 @@
 .contactInfoPhone p {
     font-weight: 700;
 }
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 42px;
+    gap: 5px;
+}
+
+.contact-info p:first-child {
+    font-size: 19px;
+    line-height: 23px;
+    margin: 0;
+}
+
+.contact-info p:last-child {
+    font-size: 16px;
+    line-height: 19px;
+    color: rgba(69, 137, 255, 1);
+    margin: 0;
+}
+
+.contact:hover {
+    background-color: rgba(210, 227, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 
 /* Edit & Delete Container that slides in on Mobile */
 .editContactMenuContainer {
