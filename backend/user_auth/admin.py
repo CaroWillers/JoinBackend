@@ -4,7 +4,9 @@ from user_auth.models import CustomUser  # Dein eigenes User-Modell importieren
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('id', 'username', 'email', 'is_staff', 'is_active')  # Welche Spalten angezeigt werden
-    ordering = ('id',)  # Sortierung nach ID
+    list_display = ('id', 'username', 'email', 'is_guest', 'is_staff', 'is_active')
+    list_filter = ('is_guest', 'is_staff', 'is_superuser', 'is_active')
+    ordering = ('id',)
+
 
 admin.site.register(CustomUser, CustomUserAdmin)

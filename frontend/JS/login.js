@@ -129,6 +129,25 @@ async function rememberPassword(email, password, remember) {
     localStorage.setItem('rememberedPassword', password);
 }
 
+
+function loadRememberedPassword() {
+    if (skipLoginForGuestUser()) return;  
+
+    let email = document.getElementById('email').value.trim();
+    if (!email) return;
+
+    let rememberedEmail = localStorage.getItem('rememberedEmail');
+    let rememberedPassword = localStorage.getItem('rememberedPassword');
+
+    if (email === rememberedEmail) {
+        document.getElementById('password').value = rememberedPassword;
+        document.getElementById('rememberCheckbox').checked = true;
+    } else {
+        document.getElementById('password').value = '';
+        document.getElementById('rememberCheckbox').checked = false;
+    }
+}
+
 /**
  * Prüft, ob das aktuelle Login für einen Gast ist.
  */
@@ -249,21 +268,43 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-/**
- * Sets up the session for a guest user and calls greetUser to display a welcome message.
- */
-async function guestLogin() { 
-    setGuestLogin();
-    successfulGuestLogin();
-}
 
 /**
- * Sets up the session for a guest user by storing necessary data in local storage.
+ * Initiates a guest login by setting tokens and user data, then redirects.
  */
-function setGuestLogin() {
+async function guestLogin() {
+    try {
+        const response = await fetch(`${API_URL}/guest-login/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Guest login failed");
+        }
+
+        setUserLogin({ name: data.user.username }, { access: data.access, refresh: data.refresh });
+        await successfulLogin();
+    } catch (error) {
+        console.error("Guest login failed:", error.message);
+        alert("Gast-Login fehlgeschlagen. Bitte versuche es erneut.");
+    }
+}
+
+
+/**
+ * Sets guest session information and stores dummy tokens.
+ */
+function setGuestLogin(tokens) {
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('currentUserName', 'Guest');
     localStorage.setItem('userType', 'guest');
+
+    // Tokens setzen (auch wenn es Dummy-Werte sind, der Rest des Codes erwartet sie)
+    localStorage.setItem('access_token', tokens.access);
+    localStorage.setItem('refresh_token', tokens.refresh);
 }
 
 /**
@@ -277,7 +318,7 @@ function successfulGuestLogin() {
         setTimeout(function() {
             if (loginModal.style.display === "block") {
                 loginModal.style.display = "none";
-                window.location.href = './index.html';
+                window.location.href = '/index.html';
                 greetUser();  
             }
         }, 2000);
@@ -345,6 +386,7 @@ function logout() {
     localStorage.removeItem('rememberedPassword'); 
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.clear();
 
     successfulLogout();
 }

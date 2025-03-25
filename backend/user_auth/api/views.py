@@ -95,3 +95,49 @@ def current_user(request):
         "username": user.username,
         "email": user.email
     })
+
+# Gast-Login-View
+# Gast-Login-View
+class GuestLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        guest_email = "guest@carogram.de"
+        guest_username = "Guest"
+
+        guest_user, created = CustomUser.objects.get_or_create(
+            email=guest_email,
+            defaults={
+                "username": guest_username,
+                "is_guest": True
+            }
+        )
+
+        # Falls bereits vorhanden, sicherstellen, dass is_guest=True gesetzt ist
+        if not created and not guest_user.is_guest:
+            guest_user.is_guest = True
+            guest_user.save()
+
+        # Falls neu erstellt, Dummy-Passwort setzen
+        if created:
+            guest_user.set_password(CustomUser.objects.make_random_password())
+            guest_user.save()
+
+        # JWT generieren
+        refresh = RefreshToken.for_user(guest_user)
+        access = refresh.access_token
+
+        # Gültigkeit beschränken (Gast-Tokens)
+        access.set_exp(lifetime=timedelta(hours=2))
+        refresh.set_exp(lifetime=timedelta(days=1))
+
+        return Response({
+            "access": str(access),
+            "refresh": str(refresh),
+            "user": {
+                "id": guest_user.id,
+                "username": guest_user.username,
+                "email": guest_user.email,
+                "is_guest": guest_user.is_guest
+            }
+        }, status=status.HTTP_200_OK)

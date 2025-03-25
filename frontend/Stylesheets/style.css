@@ -654,3 +654,13 @@ body {
         color: white !important;
     }
 }
+
+.highlightError {
+    animation: blinkError 0.3s ease-in-out 2;
+}
+
+@keyframes blinkError {
+    0% { background-color: rgba(255, 0, 0, 0.1); }
+    50% { background-color: rgba(255, 0, 0, 0.4); }
+    100% { background-color: rgba(255, 0, 0, 0.1); }
+}

@@ -9,23 +9,30 @@
  * Initializes the application after a startup animation.
  */
 async function init() {
-    let isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || localStorage.getItem("isLoggedIn") === true;
-    console.log("🔍 isLoggedIn Wert:", isLoggedIn);
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || sessionStorage.getItem("isLoggedIn") === "true";
 
     if (!isLoggedIn) {
-        await startAnimation();
-        window.location.href = "login.html";
-    } else {
-        await fetchUserData();
-        await mobileGreeting();
-        await loadTasks();
-        await summaryLoad();
-        await loadRemoteContacts();
-        greetUser();
-        setTimeout(hideStartAnimation, 500);
+        await showStartupAnimationThenRedirect();
+        return;
+    }
+
+    try {
+        insertAnimation();  
+
+        await fetchUserData();         
+        await loadRemoteContacts();   
+        await Templates("board"); 
+        await loadTasks();  
+        await summaryLoad();           
+        await mobileGreeting();         
+        greetUser();   
+
+        await delay(800);  
+        hideStartAnimation();  
+    } catch (err) {
+        console.error("❌ Fehler beim App-Start:", err);
     }
 }
-
 
 /**
  * Fetches user data from the backend based on stored authentication token.
@@ -59,40 +66,57 @@ async function fetchUserData() {
 }
 
 /**
- * Hides the start animation after a successful login.
- */
-async function hideStartAnimation() {
-    let overlay = document.getElementById("overlay");
-    if (overlay && (localStorage.getItem("isLoggedIn") === "true" || sessionStorage.getItem("isLoggedIn") === "true")) {
-        overlay.classList.add("d-none");
-    }
-}
-
-/**
- * Inserts the startup animation overlay.
+ * Zeigt das Logo auf dem Overlay.
  */
 function insertAnimation() {
-    let overlay = document.getElementById("overlay");
+    const overlay = document.getElementById("overlay");
     overlay.classList.remove("d-none");
     overlay.innerHTML = `
-        <img src="./img/logoNegative.png" alt="Negative Logo" class="overlay-logo">
+        <img src="./img/logoNegative.png" alt="Startup Logo" class="overlay-logo">
     `;
 }
 
 /**
- * Simulates a startup animation and redirects to the login page.
+ * Blendet das Logo-Overlay nach dem Login aus.
  */
-async function startAnimation() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (localStorage.getItem("isLoggedIn") !== "true" && sessionStorage.getItem("isLoggedIn") !== "true") {
-                console.log("Kein User eingeloggt. Leite zur Login-Seite um...");
-                window.location.href = "login.html";
-            }
-            resolve();
-        }, 1200);
-    });
+function hideStartAnimation() {
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("d-none");
+    overlay.innerHTML = ''; // optional: leeren
 }
+
+/**
+ * Zeigt die Animation und leitet nach 1.2s zur Login-Seite.
+ */
+async function showStartupAnimationThenRedirect() {
+    insertAnimation();
+    await delay(1200);
+    window.location.href = "login.html";
+}
+
+/**
+ * Kleiner Helper für Delay (Wartezeit).
+ * @param {number} ms - Millisekunden
+ */
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Lädt das Board-Template und danach alle Tasks.
+ */
+async function loadBoard() {
+    try { 
+        await Templates("board");  
+ 
+        await loadTasks();
+ 
+        updateCards();
+    } catch (error) {
+        console.error("❌ Fehler beim Laden des Boards:", error);
+    }
+}
+
 
 /**
  * Displays a greeting message based on the current time of day.
