@@ -27,10 +27,9 @@
                 </div>
             </div>
             <div id="todo" class="card-container"
-                ondrop="drop('todo'); removeHighlight('todo')"
+            ondrop="drop(event, 'todo'); removeHighlight('todo')"
                 ondragover="allowDrop(event); highlight('todo')"
                 ondragleave="removeHighlight('todo')">
-
                 <div class="no-task-div">No tasks To do</div>
             </div>
         </div>
@@ -46,7 +45,7 @@
                 </div>
             </div>
             <div id="progress" class="card-container"
-                ondrop="drop('progress'); removeHighlight('progress')"
+                ondrop="drop(event, 'progress'); removeHighlight('progress')"
                 ondragover="allowDrop(event); highlight('progress')"
                 ondragleave="removeHighlight('progress')">
                 <div class="no-task-div">No tasks in progress</div>
@@ -64,7 +63,7 @@
                 </div>
             </div>
             <div id="feedback" class="card-container"
-                ondrop="drop('feedback'); removeHighlight('feedback')"
+                ondrop="drop(event,'feedback'); removeHighlight('feedback')"
                 ondragover="allowDrop(event); highlight('feedback')"
                 ondragleave="removeHighlight('feedback')">
                 <div class="no-task-div">No tasks feedback</div>
@@ -77,7 +76,7 @@
                 <h3>Done</h3>
             </div>
             <div id="done" class="card-container"
-                ondrop="drop('done'); removeHighlight('done')"
+                ondrop="drop(event, 'done'); removeHighlight('done')"
                 ondragover="allowDrop(event); highlight('done')"
                 ondragleave="removeHighlight('done')">
                 <div class="no-task-div">No tasks done</div>

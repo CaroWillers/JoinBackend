@@ -1,8 +1,7 @@
 /*  Summary ----------------------------------------------------- */
 
 .summary-overview {
-    position: relative;
-    height: calc(100vh - 10rem);
+    position: relative; 
     width: 100vw;
     display: flex;
     align-items: flex-start;
@@ -367,7 +366,7 @@
     }
 
     .summary-overview {
-        height: calc(100vh - 5rem);
+        height: calc(100vh - 20rem);
         width: calc(100vw - 200px);
         display: flex;
         align-items: center;

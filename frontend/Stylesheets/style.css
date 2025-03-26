@@ -486,7 +486,7 @@ body {
     .navigation-row {
         position: relative;
         right: none;
-        top: 0;
+        top: 100px;
         flex-direction: column;
         align-items: flex-start;
         left: 0;

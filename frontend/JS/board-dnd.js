@@ -1,22 +1,29 @@
-// JS/board-dnd.js
+let currentDraggedElement = null;
+
+function startDragging(event, id) {
+    currentDraggedElement = id;
+    event.dataTransfer.setData("text/plain", id); 
+}
+
 
 function allowDrop(event) {
     event.preventDefault();
 }
 
-function drag(event, id) {
-    event.dataTransfer.setData("text/plain", id);
-}
+function drop(event, targetColumnId) {
+    event.preventDefault();
 
-function drop(targetColumnId) {
     const draggedCardId = event.dataTransfer.getData("text/plain");
     const card = cards.find(c => c.id == draggedCardId);
+
     if (card) {
         card.place = targetColumnId;
-        updateCards(); // Board aktualisieren
-        UpdateTaskInRemote(); // Optional: sync mit Backend
+        updateCards();  
+        UpdateTaskInRemote(card);  
     }
 }
+
+
 
 function highlight(columnId) {
     document.getElementById(columnId).classList.add('drag-over');
