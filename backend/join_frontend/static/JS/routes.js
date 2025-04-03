@@ -1,0 +1,2 @@
+window.ROUTES = window.ROUTES || {};
+

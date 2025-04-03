@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOIN</title>
+
+    <link rel="icon" type="image/vnd.icon" href="{% static 'img/join.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}">
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/add_task.js' %}"></script>
+    <script src="{% static 'js/register.js' %}"></script>
+</head>
+<body onload="init()">
+
+    <!-- Start Animation -->
+    <div id="slide1" class="slide1">
+        <img src="{% static 'img/logoNegative.png' %}" alt="Logo">
+    </div>
+
+    <!-- Login wird per JS eingeblendet -->
+    <div id="loginContainer"></div>
+
+    <script>
+        // Beispiel für dynamisches Laden von Login-HTML via fetch
+        async function init() {
+            const response = await fetch("{% static 'templates/login.html' %}");
+            const html = await response.text();
+            document.getElementById('loginContainer').innerHTML = html;
+        }
+    </script>
+</body>
+{% endblock %}
+</html>

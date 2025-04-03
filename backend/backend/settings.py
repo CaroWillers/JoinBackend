@@ -13,7 +13,6 @@ DEBUG = True
 # Setze erlaubte Hosts (in Produktion anpassen)
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,16 +20,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-Party Apps
+ 
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-
-    # Eigene Apps
-    'contacts',
-    'tasks',
-    'user_auth',
+ 
+    'contacts',   
+    'tasks',     
+    'user_auth', 
+    'join_frontend', 
 ]
 
 MIDDLEWARE = [
@@ -48,7 +46,7 @@ ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates', 
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -68,7 +66,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # SQLite-Datenbank im Hauptverzeichnis
     }
 }
 
@@ -86,29 +84,26 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Statische Dateien
-STATIC_URL = 'static/'
-
-# Standard Primärschlüssel
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = '/static/'  
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # CORS (Frontend-Zugriff)
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5500", 
-    "http://localhost:5500", 
+    "http://127.0.0.1:5500",  # Beispiel für ein lokal laufendes Frontend
+    "http://localhost:5500",   # Beispiel für ein weiteres lokales Frontend
 ]
 
-#Benutzerdefiniertes User-Modell
+# Benutzerdefiniertes User-Modell
 AUTH_USER_MODEL = 'user_auth.CustomUser'
 
-#Django REST Framework Konfiguration
+# Django REST Framework Konfiguration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
-#JWT Token Konfiguration
+# JWT Token Konfiguration
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Token läuft nach 1 Stunde ab
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh-Token läuft nach 7 Tagen ab
