@@ -18,7 +18,6 @@
   <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}" />
 
   <!-- ROUTES + STATIC IMG -->
-  <script src="{% static 'js/routes.js' %}"></script>
   <script>
     const STATIC_IMG = "{% static 'img/' %}";
     Object.assign(window.ROUTES, {
@@ -33,6 +32,8 @@
       addTask: "{% url 'add-task' %}",
       addTaskPopup: "{% url 'add-task-popup' %}",
     });
+    <script type="module" src="{% static 'js/routes.js' %}"></script>
+    <script type="module" src="{% static 'js/login.js' %}"></script>
   </script>
 </head>
 
@@ -48,55 +49,72 @@
                 <h1 class="h1Login">Log in</h1>
                 <div class="seperator"></div>
             </div>
-            <form class="loginForm" onsubmit="login(); return false;">
+            <form class="loginForm" id="loginForm">
                 <div class="inputField">
-                    <input class="input user-email" type="email" required id="email" placeholder="Email"
-                        autocomplete="email" onkeyup="loadRememberedPassword()">
-                    <img class="inputImage" src="{% static 'img/mail.svg' %}">
+                  <input 
+                    class="input user-email" 
+                    type="email" 
+                    required 
+                    id="email" 
+                    placeholder="Email"
+                    autocomplete="email"
+                  >
+                  <img class="inputImage" src="{% static 'img/mail.svg' %}">
                 </div>
+              
                 <div class="inputField">
-                    <input class="input" type="password" required id="password" placeholder="Password"
-                        autocomplete="current-password" onfocus="changeLockIcon(this)">
-                    <img class="inputImage" id="passwordIcon" src="{% static 'img/lock.svg' %}"
-                        onclick="togglePassword('password')">
+                  <input 
+                    class="input" 
+                    type="password" 
+                    required 
+                    id="password" 
+                    placeholder="Password"
+                    autocomplete="current-password"
+                  >
+                  <img 
+                    class="inputImage" 
+                    id="passwordIcon" 
+                    src="{% static 'img/lock.svg' %}"
+                  >
                 </div>
+              
                 <div id="passwordError" class="passwordError">Wrong password! Try again.</div>
+              
                 <div class="loginCheckboxContainer">
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            id="rememberCheckbox" 
-                            class="hiddenCheckbox"
-                            onchange="toggleRememberMeCheckbox(this); handleRememberMeChange();"
-                        >
-                        <img 
-                            class="checkboxImage" 
-                            src="{% static 'img/Rectangle5.svg' %}" 
-                            data-checked="{% static 'img/checked.svg' %}" 
-                            data-unchecked="{% static 'img/Rectangle5.svg' %}"
-                        >
-                        <span>Remember me</span>
-                    </label>
+                  <label>
+                    <input 
+                      type="checkbox" 
+                      id="rememberCheckbox" 
+                      class="hiddenCheckbox"
+                    >
+                    <img 
+                      class="checkboxImage" 
+                      src="{% static 'img/Rectangle5.svg' %}" 
+                      data-checked="{% static 'img/checked.svg' %}" 
+                      data-unchecked="{% static 'img/Rectangle5.svg' %}"
+                    >
+                    <span>Remember me</span>
+                  </label>
                 </div>
-        
+              
                 <div class="buttonContainer">
-                    <button type="submit" class="blueBtn">Log in</button>
-                    <button type="button" onclick="guestLogin()" class="greyBorderBtn">Guest log in</button>
+                  <button type="submit" class="blueBtn">Log in</button> 
+                  <button type="button" id="guestLoginBtn" class="greyBorderBtn">Guest log in</button>
                 </div>
-            </form>            
-        </div>
-    </div>
-
-    <div class="noJoinUser">
-        <span>Not a Join User?</span>
-        <button class="blueBtn" onclick="window.location.href='{% url 'signup' %}'">Sign up</button>
-    </div>
-
-    <div class="legalNotes">
-        <button onclick="window.location.href='{% static 'privacyPolicyLogin.html' %}?ref=login'">Privacy Policy</button>
-        <button onclick="window.location.href='{% static 'legalNoticeLogin.html' %}?ref=login'">Legal Notice</button>
-    </div>    
-
+              </form>
+            </div>
+        </div>   
+              
+              <div class="noJoinUser">
+                <span>Not a Join User?</span>
+                <button class="blueBtn" id="signupBtn">Sign up</button>
+              </div>
+              
+              <div class="legalNotes">
+                <button id="privacyPolicyBtn">Privacy Policy</button>
+                <button id="legalNoticeBtn">Legal Notice</button>
+              </div>
+              
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <p>Welcome! You're logged in.</p>
@@ -110,7 +128,6 @@
     </div>
 </main>
   <!-- JS: Funktionalität -->
-  <script src="{% static 'js/config.js' %}"></script> 
-  <script src="{% static 'js/login.js' %}"></script>
+  <script type="module" src="{% static 'js/config.js' %}"></script>
 </body>
 </html> 

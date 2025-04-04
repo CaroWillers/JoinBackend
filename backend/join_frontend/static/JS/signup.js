@@ -1,3 +1,5 @@
+import { API_URL } from './config.js';
+
 /**
  * Validates the user's email address.
  * @returns {boolean} Returns true if the email address is valid, otherwise false.
@@ -292,19 +294,6 @@ async function validateEmailAndPrivacy(email) {
     }
     return true;
 }
-
-/**
- * Prüft, ob die Datenschutzerklärung akzeptiert wurde.
- */
-function checkPrivacyPolicy() {
-    let realCheckbox = document.querySelector(".realCheckbox");
-    if (!realCheckbox.checked) {
-        alert("Bitte akzeptieren Sie die Datenschutzbestimmungen.");
-        return false;
-    }
-    return true;
-}
-
 
 /**
  * Constructs a user object from the provided form data.

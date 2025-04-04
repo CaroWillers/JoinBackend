@@ -1,3 +1,6 @@
+import { API_URL } from './config.js';
+import { greetUser } from "./script.js";
+
 /**
  * Checks if an email already exists in the user data.
  * @param {string} email - Email address to check against the existing users.
@@ -140,18 +143,7 @@ function loadRememberedPassword() {
 }
 
 /**
- * Prüft, ob das aktuelle Login für einen Gast ist.
- */
-function skipLoginForGuestUser() {
-    return localStorage.getItem('userType') === 'guest';
-}
-
-/**
- * Toggles the checkbox that states if the Privacy Policy was accepted or not and updatates the checkbox image.
- * Toggles the state of a checkbox and updates the image icon to checked or not checked
- * This function is used on login and signup pages to handle user interaction with the checkboxes,
- * such as remembering passwords and accepting privacy policies. 
-* @param {HTMLElement} buttonElement - On click of this button, the state of the checkbox will be toggled.
+ * Toggles the checkbox that states if the Privacy Policy was accepted or not and updatates the checkbox image. 
  */
 function toggleRememberMeCheckbox(inputElement) { 
     let checkboxImage = inputElement.parentElement.querySelector('.checkboxImage');
@@ -179,15 +171,6 @@ function handleRememberMeChange() {
 }
 
 /**
- * Toggles the visibility and state of a custom checkbox UI element.
- * @param {HTMLElement} label - The label element associated with the checkbox.
- */
-function toggleRememberMeCheckbox(inputElement) { 
-    let checkboxImage = inputElement.parentElement.querySelector('.checkboxImage');
-    checkboxImage.src = inputElement.checked ? checkboxImage.getAttribute('data-checked') : checkboxImage.getAttribute('data-unchecked');
-}
-
-/**
  * Checks if the current user session is for a guest to decide on skipping password restoration.
  * @returns {boolean} True if the user is a guest, otherwise false.
  */
@@ -198,30 +181,6 @@ function skipLoginForGuestUser() {
     }
     return false;
 }
-
-/**
- * Automatically fills in the password field and checks the "Remember Me" checkbox if the user's email is remembered.
- * Calls a separate function to determine if this action should be skipped for guest users.
- * @async
- */
-function loadRememberedPassword() {
-    if (skipLoginForGuestUser()) return;
-
-    let email = document.getElementById('email').value.trim();
-    if (email.length === 0) return;
-
-    let rememberedEmail = localStorage.getItem('rememberedEmail');
-    let rememberedPassword = localStorage.getItem('rememberedPassword');
-
-    if (email === rememberedEmail) {
-        document.getElementById('password').value = rememberedPassword;
-        document.getElementById('rememberCheckbox').checked = true;
-    } else {
-        document.getElementById('password').value = '';
-        document.getElementById('rememberCheckbox').checked = false;
-    }
-}
-
 
 
 /**
@@ -244,6 +203,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let msg = urlParams.get('msg');
     if (msg) {
         document.getElementById('msgBox').innerHTML = msg;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const guestBtn = document.getElementById("guestLoginBtn");
+    if (guestBtn) {
+        guestBtn.addEventListener("click", guestLogin);
     }
 });
 
@@ -306,55 +272,6 @@ function successfulGuestLogin() {
     }
 }
 
-/**
- * Displays a greeting message based on the current time of day to the logged-in user.
- */
-async function greetUser() {
-    const userType = localStorage.getItem('userType') || 'guest';
-    const userName = localStorage.getItem('currentUserName') || 'Guest';
-    const greetingElement = document.getElementById('greeting');
-    const greetingUserElement = document.getElementById('greeting-user');
-
-    let currentHour = new Date().getHours();
-    let greetingText = currentHour < 12 ? "Good morning" : currentHour < 18 ? "Good afternoon" : "Good evening";
-
-    if (userType === 'guest') {
-        // Gastbenutzer
-        greetingElement.textContent = `${greetingText}, dear guest!`;
-        greetingElement.style.color = '#000'; // Optional: Gastfarbe
-    } else {
-        // Registrierter Benutzer
-        greetingElement.textContent = `${greetingText}, ${userName}!`; // Benutzername wird eingefügt
-        greetingElement.style.color = '#4589FF'; // Registrierter Benutzer
-    }
-
-    // Initialen anzeigen
-    UserInitials(userName); 
-}
-
-
-
-
-/**
- * Displays user initials based on the provided user name on the board.
- * @param {string} userName - The full name of the user.
- */
-function UserInitials(userName) {
-    const userInitialsContainer = document.getElementById('user-initals');
-
-    if (userName) {
-        const names = userName.split(' ');
-        let initials = names[0].substring(0, 1).toUpperCase();
-
-        if (names.length > 1) {
-            initials += names[names.length - 1].substring(0, 1).toUpperCase();
-        }
-
-        userInitialsContainer.innerText = initials;
-    } else {
-        userInitialsContainer.innerText = "G"; // Standardwert für Gast
-    }
-}
 
 /**
  * Logs out the current user by clearing session-related data and redirecting to the login page.
@@ -391,3 +308,46 @@ function successfulLogout() {
     }
  }
 	
+ document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const passwordIcon = document.getElementById("passwordIcon");
+    const rememberCheckbox = document.getElementById("rememberCheckbox");
+    const guestBtn = document.getElementById("guestLoginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const privacyBtn = document.getElementById("privacyPolicyBtn");
+    const legalBtn = document.getElementById("legalNoticeBtn");
+
+    // 📩 Beim Tippen in E-Mail-Feld: gespeicherte Daten ggf. laden
+    emailInput?.addEventListener("keyup", loadRememberedPassword);
+
+    // 🔒 Icon-Wechsel bei Passwort-Fokus
+    passwordInput?.addEventListener("focus", () => {
+        clearPasswordError();
+        changeLockIcon(passwordInput); // optional: eigenes Icon-Handling
+    });
+
+    // 🔐 Passwort anzeigen/verstecken
+    passwordIcon?.addEventListener("click", () => togglePassword("password"));
+
+    // ✅ Checkbox-Logik für "Remember Me"
+    rememberCheckbox?.addEventListener("change", () => {
+        toggleRememberMeCheckbox(rememberCheckbox);
+        handleRememberMeChange();
+    });
+
+    // 🚀 Login bei Submit
+    loginForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        login();
+    });
+
+    // 👥 Gast-Login
+    guestBtn?.addEventListener("click", guestLogin);
+
+    // 🔄 Weiterleitungen
+    signupBtn?.addEventListener("click", () => window.location.href = ROUTES.signup);
+    privacyBtn?.addEventListener("click", () => window.location.href = "{% static 'privacyPolicyLogin.html' %}?ref=login");
+    legalBtn?.addEventListener("click", () => window.location.href = "{% static 'legalNoticeLogin.html' %}?ref=login");
+});

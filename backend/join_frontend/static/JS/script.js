@@ -1,26 +1,46 @@
+import { API_URL } from './config.js';
 import { TemplateLoader } from "./template-loader.js";
 import { loadRemoteContacts } from "./contacts.service.js";
-import { summaryLoad } from "./summary.js";
-import { loadTasks, updateCards } from "./tasks.js"; 
-import {
-    loadContacts,
-    initContacts,
-    getInitials,
-    getRandomAvatarColor
-  } from "./contacts.service.js";
+import { summaryLoad } from "./summary.js"; 
+import { updateCards } from "./board-tasks.js";  
+import { loadContacts } from './contacts.service.js';
+import { registerBoardEvents } from './board.events.js';
+import { registerTaskFormEvents } from './task-form.events.js';
+import { registerContactsEvents } from './contacts.events.js';
+import { registerSummaryEvents } from './summary.events.js';
+import { initHelpEvents } from './help.events.js';
+import { initLegalNoticeEvents } from './legal_notice.events.js';
+import { initPrivacyPolicyEvents } from './privacy_legal.events.js';
   
-  import {
-    openAddContactForm,
-    openContactInfo,
-    closeContactDetails,
-    renderContactList
-  } from "./contacts.ui.js";
-  
+document.addEventListener('DOMContentLoaded', async () => {
+    // Module Initialisierung
+    registerBoardEvents();
+    registerTaskFormEvents();
+    registerContactsEvents();
+    registerSummaryEvents();
+    initHelpEvents();
+    initLegalNoticeEvents();
+    if (window.location.pathname.includes('privacy-policy')) {
+        initPrivacyPolicyEvents();
+    }
 
+    // Navigation und generische Events
+    document.getElementById('navSummary')?.addEventListener('click', summaryLoad);
+    document.getElementById('navBoard')?.addEventListener('click', loadBoard);
+    document.getElementById('navContacts')?.addEventListener('click', loadContacts);
+    document.getElementById('navLogo')?.addEventListener('click', summaryLoad);
+    document.getElementById('helpIcon')?.addEventListener('click', () => Templates('help'));
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('dropdownHelp')?.addEventListener('click', dropdownHelp);
+    document.getElementById('dropdownPrivacyPolicy')?.addEventListener('click', dropdownPrivacyPolicy);
+    document.getElementById('dropdownLegalNotice')?.addEventListener('click', dropdownLegalNotice);
+    document.getElementById('user-initals')?.addEventListener('click', openDropdown);
+    document.getElementById('board-card-overlay')?.addEventListener('click', closeCard);
+    document.getElementById('board-card-popup')?.addEventListener('click', e => e.stopPropagation());
 
-window.addEventListener('DOMContentLoaded', async () => {
+    // Initiales Template laden
     await TemplateLoader.load('board');
-  });
+});
 
 /**
  * Entry point for index.html.
@@ -127,6 +147,17 @@ async function fetchUserData() {
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("board-card-overlay");
+    const popup = document.getElementById("board-card-popup");
+  
+    overlay?.addEventListener("click", closeCard);
+    popup?.addEventListener("click", function (event) {
+      event.stopPropagation();  
+    });
+  });
+  
+
 /**
  * Zeigt das Logo auf dem Overlay.
  */
@@ -195,23 +226,49 @@ function hideLoadingOverlay() {
 
 
 /**
- * Displays a greeting message based on the current time of day.
+ * Displays a greeting message based on the current time of day to the logged-in user.
  */
-function greetUser() {
-    const userType = localStorage.getItem("userType") || sessionStorage.getItem("userType") || "guest";
-    const userName = localStorage.getItem("currentUserName") || sessionStorage.getItem("currentUserName") || "Guest";
-    const greetingElement = document.getElementById("greeting");
+export async function greetUser() {
+    const userType = localStorage.getItem('userType') || 'guest';
+    const userName = localStorage.getItem('currentUserName') || 'Guest';
+    const greetingElement = document.getElementById('greeting');
+    const greetingUserElement = document.getElementById('greeting-user');
 
     let currentHour = new Date().getHours();
-    let greetingText =
-        currentHour < 12 ? "Good morning" :
-        currentHour < 18 ? "Good afternoon" :
-        "Good evening";
+    let greetingText = currentHour < 12 ? "Good morning" : currentHour < 18 ? "Good afternoon" : "Good evening";
 
-    if (greetingElement) {
-        greetingElement.textContent = userType === "guest"
-            ? `${greetingText}, dear guest!`
-            : `${greetingText}, ${userName}!`;
+    if (userType === 'guest') {
+        // Gastbenutzer
+        greetingElement.textContent = `${greetingText}, dear guest!`;
+        greetingElement.style.color = '#000'; // Optional: Gastfarbe
+    } else {
+        // Registrierter Benutzer
+        greetingElement.textContent = `${greetingText}, ${userName}!`; // Benutzername wird eingefügt
+        greetingElement.style.color = '#4589FF'; // Registrierter Benutzer
+    }
+
+    // Initialen anzeigen
+    UserInitials(userName); 
+}
+
+/**
+ * Displays user initials based on the provided user name on the board.
+ * @param {string} userName - The full name of the user.
+ */
+export function UserInitials(userName) {
+    const userInitialsContainer = document.getElementById('user-initals');
+
+    if (userName) {
+        const names = userName.split(' ');
+        let initials = names[0].substring(0, 1).toUpperCase();
+
+        if (names.length > 1) {
+            initials += names[names.length - 1].substring(0, 1).toUpperCase();
+        }
+
+        userInitialsContainer.innerText = initials;
+    } else {
+        userInitialsContainer.innerText = "G"; // Standardwert für Gast
     }
 }
 
@@ -221,7 +278,7 @@ function greetUser() {
 async function mobileGreeting() {
     if (window.innerWidth < 800) {
         await TemplateGreetMobile();
-        await greetUserMobile();
+        greetUserMobile();
         return new Promise((resolve) => setTimeout(resolve, 1200));
     }
 }

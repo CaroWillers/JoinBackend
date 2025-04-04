@@ -1,3 +1,5 @@
+import { API_URL } from './config.js';
+
 const avatarColors = [
     "rgb(255,122,0)", "rgb(255,70,70)", "rgb(147,39,255)",
     "rgb(110,82,255)", "rgb(252,113,255)", "rgb(255,187,43)",
@@ -7,9 +9,6 @@ const avatarColors = [
   let localContacts = [];
   let currentUser = localStorage.getItem("currentUserName");
   let userEmail = localStorage.getItem("userEmail") || "";
-  
-  // 💾 Globale Variable, wenn API_URL nicht schon woanders kommt
-  const API_URL = window.API_URL || "/api";
   
   /**
    * Lädt Kontakte aus dem Backend und zeigt sie an.

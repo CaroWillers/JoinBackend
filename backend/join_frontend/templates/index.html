@@ -23,27 +23,27 @@
   <!-- Overlays und Container -->
   <div id="overlay" class="overlay"></div>
 
-  <div class="board-card-overlay d-none" id="board-card-overlay" onclick="closeCard()">
-    <div class="board-card-popup d-none" id="board-card-popup" onclick="doNotClose(event)"></div>
+  <div class="board-card-overlay d-none" id="board-card-overlay">
+    <div class="board-card-popup d-none" id="board-card-popup"></div>
   </div>
-
-  <div class="navigation-overlay d-none" id="navigation-overlay" onclick="closeDropdown()">
-    <div class="dropdown-container" id="navigation-dropdown" onclick="doNotClose(event)">
-      <a class="help-dropdown" onclick="dropdownHelp()">Help</a>
-      <a onclick="dropdownLegalNotice()">Legal Notice</a>
-      <a onclick="dropdownPrivacyPolicy()">Privacy Policy</a>
-      <a onclick="logout()">Log out</a>
+  
+  <div class="navigation-overlay d-none" id="navigation-overlay">
+    <div class="dropdown-container" id="navigation-dropdown">
+      <a class="help-dropdown" id="dropdownHelp">Help</a>
+      <a id="dropdownLegalNotice">Legal Notice</a>
+      <a id="dropdownPrivacyPolicy">Privacy Policy</a>
+      <a id="logoutBtn">Log out</a>
     </div>
   </div>
 
   <!-- Header -->
   <div class="headline">
-    <img class="navLogo" src="{% static 'img/logo-white.svg' %}" alt="logo" onclick="summaryLoad()" />
+    <img class="navLogo" src="{% static 'img/logo-white.svg' %}" alt="logo" id="navLogo" />
     <div class="headline-user-info">
       <p>Kanban Project Management Tool</p>
-      <img class="help" src="{% static 'img/help-icon.svg' %}" alt="help icon" onclick="Templates('help')" />
+      <img class="help" src="{% static 'img/help-icon.svg' %}" alt="help icon" id="helpIcon" />
       <div class="dropdowen-hader">
-        <div class="user-initals" id="user-initals" onclick="openDropdown()"></div>
+        <div class="user-initals" id="user-initals"></div>
       </div>
     </div>
   </div>
@@ -52,28 +52,28 @@
   <div class="main-container">
     <div class="navigation">
       <div class="navigation-row">
-        <div id="navSummary" class="navigation-item" onclick="summaryLoad()">
+        <div id="navSummary" class="navigation-item">
           <img class="unclicked" src="{% static 'img/summary-icon-gray.svg' %}" />
           <img class="clicked d-none" src="{% static 'img/summary-icon-blue.svg' %}" />
           <p>Summary</p>
         </div>
-        <div id="navBoard" class="navigation-item" onclick="loadBoard()">
+        <div id="navBoard" class="navigation-item">
           <img class="unclicked" src="{% static 'img/board-icon-gray.svg' %}" />
           <img class="clicked d-none" src="{% static 'img/board-icon-blue.svg' %}" />
           <p>Board</p>
         </div>
-        <div class="navigation-item" onclick="loadContacts()">
+        <div id="navContacts" class="navigation-item">
           <img class="unclicked" src="{% static 'img/contacts-icon-gray.svg' %}" />
           <img class="clicked d-none" src="{% static 'img/contacts-icon-blue.svg' %}" />
           <p>Contacts</p>
         </div>
       </div>
     </div>
-
-    <div class="content" id="content">
-      {% block content %}{% endblock %}
-    </div>
   </div>
+
+  <div class="content" id="content">
+    {% block content %}{% endblock %}
+  </div> 
 
   <!-- Modals -->
   <div id="successfulLogoutModal" class="modal">
@@ -103,14 +103,21 @@
   </script>
  
 <!-- MODULES --> 
+<script type="module" src="{% static 'js/config.js' %}"></script>
+<script type="module" src="{% static 'js/routes.js' %}"></script> 
+<script type="module" src="{% static 'js/task-utils.js' %}"></script>
 <script type="module" src="{% static 'js/template-loader.js' %}"></script>
 <script type="module" src="{% static 'js/contacts.service.js' %}"></script>
 <script type="module" src="{% static 'js/contacts.ui.js' %}"></script>  
+<script type="module" src="{% static 'js/board-ui.js' %}"></script>
 <script type="module" src="{% static 'js/board-tasks.js' %}"></script>
-<script type="module" src="{% static 'js/summary.js' %}"></script>
-<script type="module" src="{% static 'js/tasks.js' %}"></script>
-<script type="module" src="{% static 'js/board.js' %}"></script>
+<script type="module" src="{% static 'js/board-dnd.js' %}"></script>
+<script type="module" src="{% static 'js/task-api.js' %}"></script>
+<script type="module" src="{% static 'js/task-form.js' %}"></script>
+<script type="module" src="{% static 'js/task-subtasks.js' %}"></script>
+<script type="module" src="{% static 'js/summary.js' %}"></script> 
+<script type="module" src="{% static 'js/login.js' %}"></script>
+<script type="module" src="{% static 'js/signup.js' %}"></script>
 <script type="module" src="{% static 'js/script.js' %}"></script>
-
 </body>
 </html>

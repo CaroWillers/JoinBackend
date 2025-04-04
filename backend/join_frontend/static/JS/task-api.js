@@ -1,13 +1,19 @@
+import { getTaskData, validateTaskData, resetCreateTaskFormInputs } from './task-form.js';
+import { showTaskCreatedPopUp } from './task-popup.js';
+import { renderCategoryOptions } from './task-form.js';
+import { API_URL } from './config.js'; 
+
+export let taskCategories = [];
+
 /**
- * Sendet ein neues Task-Objekt an das Backend.
- * Holt die Daten aus dem Formular und macht einen POST-Request an /tasks/.
+ * Erstellt einen neuen Task und sendet ihn ans Backend.
  */
-async function createTask() {
+export async function createTask() {
     const taskData = getTaskData();
     if (!validateTaskData(taskData)) return;
 
     try {
-        const token = localStorage.getItem('access_token'); // JWT Auth
+        const token = localStorage.getItem('access_token');
         const response = await fetch(`${API_URL}/tasks/`, {
             method: "POST",
             headers: {
@@ -22,13 +28,12 @@ async function createTask() {
                 category: taskData.category.id,
                 assigned: taskData.assigned,
                 subtasks: taskData.subtasks,
-                completed: false   
+                completed: false
             })
         });
 
         if (!response.ok) throw new Error("Task konnte nicht erstellt werden");
 
-        // Zeige Erfolgsmeldung & bereinige Form
         showTaskCreatedPopUp();
         resetCreateTaskFormInputs();
     } catch (error) {
@@ -37,5 +42,38 @@ async function createTask() {
     }
 }
 
+/**
+ * Lädt die verfügbaren Kategorien vom Backend.
+ */
+export async function loadTaskCategories() {
+    try {
+        const res = await fetch(`${API_URL}/tasks/categories/`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        });
 
- 
+        if (!res.ok) throw new Error("Kategorien konnten nicht geladen werden");
+        taskCategories = await res.json();
+    } catch (err) {
+        console.error("❌ Fehler beim Laden der Kategorien:", err.message);
+    }
+}
+
+/**
+ * Initialisiert das Taskformular.
+ */
+export async function loadTasks() {
+    try {
+        await Templates("addTask");
+        await includeHTML();
+        await delay(20);
+
+        resetCreateTaskFormInputs();
+        setMinDueDate();
+        await loadTaskCategories();
+        renderCategoryOptions();
+    } catch (err) {
+        console.error("❌ Fehler beim Laden des Add Task-Formulars:", err);
+    }
+}

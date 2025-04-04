@@ -1,7 +1,7 @@
 /**
  * Zeigt das Popup nach erfolgreichem Task-Erstellen im normalen Modus (nicht Popup-Fenster).
  */
-function showTaskCreatedPopUp() {
+export function showTaskCreatedPopUp() {
     const container = document.getElementById('taskCreatedButtonContainer');
     const popup = document.getElementById('taskCreatedButton');
 
@@ -25,7 +25,7 @@ function showTaskCreatedPopUp() {
  * Zeigt das Erfolgspopup im Popup-Modus (kleine Ansicht).
  * Danach wird das Popup geschlossen und das Board neu geladen.
  */
-function showTaskCreatedPopUpBoard() {
+export function showTaskCreatedPopUpBoard() {
     const container = document.getElementById('taskCreatedButtonContainerBoard');
     container.style.display = "flex";
 

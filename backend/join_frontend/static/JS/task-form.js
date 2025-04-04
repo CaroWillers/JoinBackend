@@ -5,43 +5,11 @@ let selectedAssignedContacts = [];
 let createdSubtasks = [];
 let taskCategories = [];
 
-async function loadAddTasks() {
-    try {
-        await Templates("addTask");        
-        await includeHTML();              
-        await delay(20);                   
-
-        resetAddTaskForm();               
-        setMinDueDate();
-        await loadTaskCategories(); 
-        renderCategoryOptions();          
-       
-
-    } catch (err) {
-        console.error("❌ Fehler beim Laden des Add Task-Formulars:", err);
-    }
-}
-
-async function loadTaskCategories() {
-    try {
-        const res = await fetch(`${API_URL}/tasks/categories/`, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-            }
-        });
-
-        if (!res.ok) throw new Error("Kategorien konnten nicht geladen werden");
-        taskCategories = await res.json();
-    } catch (err) {
-        console.error("❌ Fehler beim Laden der Kategorien:", err.message);
-    }
-}
-
 /**
  * Rendert die verfügbaren Task-Kategorien in das Dropdown-Menü.
  * Diese Funktion wird z. B. beim Laden des AddTask-Templates aufgerufen.
  */
-function renderCategoryOptions() {
+export function renderCategoryOptions() {
     const container = document.getElementById('dropdownSelectTasksCategory');
     if (!container) {
         console.warn("⚠️ Kategorie-Dropdown (#dropdownSelectTasksCategory) nicht gefunden.");
@@ -77,7 +45,7 @@ function selectCategory(name, color, id) {
  * Holt alle Daten aus dem Task-Formular.
  * @returns {Object} Taskdaten
  */
-function getTaskData() {
+export function getTaskData() {
     const categoryField = document.getElementById('selectTaskCategoryTextField');
     return {
         title: getValidatedTitle(),
@@ -99,7 +67,7 @@ function getTaskData() {
  * @param {Object} taskData - Die zu prüfenden Daten
  * @returns {boolean}
  */
-function validateTaskData(taskData) {
+export function validateTaskData(taskData) {
     const validCategory = taskCategories.some(category => category.name === taskData.category);
     const allValid = taskData.title && taskData.dueDate && validCategory;
 
@@ -234,7 +202,7 @@ function resetAllPriorityButtons() {
 /**
  * Setzt das gesamte Formular zurück.
  */
-function resetCreateTaskFormInputs() {
+export function resetCreateTaskFormInputs() {
     boardPlace = "";
     priorities = [];
     selectedAssignedContacts = [];

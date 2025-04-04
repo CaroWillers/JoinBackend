@@ -8,7 +8,7 @@
 
             <!-- Task Overview Buttons -->
             <div class="btn-container">
-                <button class="urgent-button" onclick="loadBoard()">
+                <button class="urgent-button" id="btnUrgent">
                     <div class="btn-urgent-front">
                         <div class="flex-row">
                             <img src="{% static 'img/urgent-icon.svg' %}" alt="clock icon" />
@@ -23,7 +23,7 @@
                     </div>
                 </button>
 
-                <button class="to-do-btn" onclick="loadBoard()">
+                <button class="to-do-btn" id="btnTodo">
                     <div class="to-do-btn-row">
                         <img src="{% static 'img/to-do-icon.svg' %}" alt="to-do-icon" />
                         <h2 id="to-do-number" class="task-number">1</h2>
@@ -31,7 +31,7 @@
                     <p class="btn-text">Tasks To-Do</p>
                 </button>
 
-                <button class="light-task-btn board" onclick="loadBoard()">
+                <button class="light-task-btn board" id="btnBoardTasks">
                     <div class="flex-row gap-btn-light">
                         <div class="summary-boarder-icon">
                             <img src="{% static 'img/board-task-icon.svg' %}" alt="" />
@@ -41,7 +41,7 @@
                     <p class="btn-text">Tasks on<br />Board</p>
                 </button>
 
-                <button class="light-task-btn progress" onclick="loadBoard()">
+                <button class="light-task-btn progress" id="btnProgress">
                     <div class="flex-row gap-btn-light">
                         <div class="summary-boarder-icon">
                             <img src="{% static 'img/progress-icon.svg' %}" alt="" />
@@ -51,7 +51,7 @@
                     <p class="btn-text">Tasks in<br />Progress</p>
                 </button>
 
-                <button class="light-task-btn feedback" onclick="loadBoard()">
+                <button class="light-task-btn feedback" id="btnFeedback">
                     <div class="flex-row gap-btn-light">
                         <div class="summary-boarder-icon">
                             <img src="{% static 'img/feedback-icon.svg' %}" alt="" />
@@ -61,7 +61,7 @@
                     <p class="btn-text">Awaiting<br />Feedback</p>
                 </button>
 
-                <button class="light-task-btn done" onclick="loadBoard()">
+                <button class="light-task-btn done" id="btnDone">
                     <div class="flex-row gap-btn-light">
                         <div class="summary-boarder-icon">
                             <img src="{% static 'img/done-icon.svg' %}" alt="" />

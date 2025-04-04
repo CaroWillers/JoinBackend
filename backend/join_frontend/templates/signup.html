@@ -21,7 +21,6 @@
     <script src="{% static 'js/routes.js' %}"></script>
     <script>
     const STATIC_IMG = "{% static 'img/' %}";
-    
         Object.assign(ROUTES, {
           login: "{% url 'login' %}",
           signup: "{% url 'signup' %}",
@@ -35,8 +34,8 @@
           addTaskPopup: "{% url 'add-task-popup' %}",
         });
     </script>
-    <script src="{% static 'js/config.js' %}"></script> 
-    <script src="{% static 'js/signup.js' %}"></script>
+    <script type="module" src="{% static 'js/config.js' %}"></script>
+    <script type="module" src="{% static 'js/signup.js' %}"></script>
 </head>
 
 <body>

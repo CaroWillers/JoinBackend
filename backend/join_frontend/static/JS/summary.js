@@ -1,17 +1,16 @@
-import { cards } from "./board-tasks.js";
-import { greetUser } from "./login.js";  
+import { cards } from "./board-tasks.js"; 
+import { greetUser } from "./script.js";
+import { initSummaryEvents } from './summary.events.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSummaryEvents();
+  });
 
 /**
  * Loads summary template, updates summary numbers, and highlights summary navigation.
  * Loads and displays the summary template and then retrieves task counts for each list.
- *
- * This function uses `async` to load the summary template via `Templates` (not provided).
- * After successful loading (assumed), it:
- *  - Updates summary numbers with `summaryLoadNumbers` (implementation not provided).
- *  - Highlights the summary navigation section with `changeNavigationHighlightSummary`.
- * @async
  */
-async function summaryLoad() {
+export async function summaryLoad() {
     await Templates('summary'); // Lade die Summary-Template
 
     // 🔄 Warte, bis die Elemente wirklich im DOM existieren
@@ -28,7 +27,6 @@ async function summaryLoad() {
         greetUser();
     }, 300);
 }
-
 
 /**
  * Highlights the summary navigation element and removes highlights from legal sections.

@@ -1,7 +1,5 @@
 import {
-    loadRemoteContacts,
-    getInitials,
-    getRandomAvatarColor
+    loadRemoteContacts, 
   } from './contacts.service.js';
   
   export { 
