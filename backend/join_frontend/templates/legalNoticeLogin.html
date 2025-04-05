@@ -16,34 +16,22 @@
   <link rel="stylesheet" href="{% static 'css/contacts.css' %}" />
   <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}" />
 
-  <!-- JavaScript URLs aus Django -->
+  <!-- JavaScript-Konstanten -->
   <script>
     const LOGIN_URL = "{% url 'login' %}";
     const PRIVACY_URL = "{% static 'privacyPolicyLogin.html' %}";
     const LEGAL_URL = "{% static 'legalNoticeLogin.html' %}";
+    const STATIC_IMG = "{% static 'img/' %}";
   </script>
 
-  <!-- JS -->
-  <script src="{% static 'js/script.js' %}"></script>
-  <script src="{% static 'js/summary.js' %}"></script>
-  <script src="{% static 'js/contacts_part1.js' %}"></script>
-  <script src="{% static 'js/contacts_part2.js' %}"></script>
-  <script src="{% static 'js/privacy_legal.js' %}"></script>
-  <script src="{% static 'js/signup.js' %}"></script>
-  <script src="{% static 'js/login.js' %}"></script>
-  <script src="{% static 'js/storage.js' %}"></script>
-  <script src="{% static 'js/addTask_part1.js' %}"></script>
-  <script src="{% static 'js/addTask_part2.js' %}"></script>
-  <script src="{% static 'js/addTask_part3.js' %}"></script>
-  <script src="{% static 'js/board_part1.js' %}"></script>
-  <script src="{% static 'js/board_part2.js' %}"></script>
-  <script src="{% static 'js/templates.js' %}"></script>
+  <!-- Modul-basierter JS-Import -->
+  <script type="module" src="{% static 'js/legal_notice.events.js' %}"></script>
 </head>
 
 <body id="body">
   <div>
     <div class="headline">
-      <img class="navLogo" src="{% static 'img/logo white.svg' %}" alt="logo" onclick="window.location.href = LOGIN_URL">
+      <img id="navLogo" class="navLogo" src="/static/img/logo white.svg" alt="logo" />
       <div class="headline-user-info">
         <p>Kanban Project Management Tool</p>
       </div>
@@ -52,9 +40,9 @@
 
   <div class="main-container-Legal">
     <div class="navigation">
-      <div class="navigation-legal" onclick="clickedLegalPart()">
-        <div id="navPrivacyPolicy" onclick="navigateTo(PRIVACY_URL)">Privacy Policy</div>
-        <div id="navLegalNotice" class="navigation-legal-clicked" onclick="navigateTo(LEGAL_URL)">Legal Notice</div>
+      <div class="navigation-legal">
+        <div id="navPrivacyPolicy">Privacy Policy</div>
+        <div id="navLegalNotice" class="navigation-legal-clicked">Legal Notice</div>
       </div>
     </div>
 
@@ -62,13 +50,13 @@
       <main class="templateMainContainer">
         <div class="topHeadline">
           <h1 class="pp-h1">Legal Notice</h1>
-          <button class="goBackButton" onclick="goBack()" aria-label="Zurück">
+          <button id="goBackBtn" class="goBackButton" aria-label="Zurück">
             <div class="imageContainer"></div>
           </button>
         </div>
 
         <h2 class="pp-h2">Imprint</h2><br>
-        <p>Alice Buchholz, Vitali Rudi, Caroline Willers<br>Musterstraße 5<br>5555 Musterstadt</p><br>
+        <p>Caroline Willers<br>Musterstraße 5<br>5555 Musterstadt</p><br>
 
         <h3 class="pp-h3">Exploring the Board</h3>
         teamjoin@gmail.com<br><br>

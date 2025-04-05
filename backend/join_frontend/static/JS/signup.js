@@ -321,3 +321,36 @@ async function saveNewUser(user) {
     await setItem('users', JSON.stringify(users));
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("signupForm")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      addUser();
+    });
+  
+    document.getElementById("email")?.addEventListener("keyup", validateEmailAddress);
+    document.getElementById("email")?.addEventListener("blur", checkEmailExistence);
+  
+    document.getElementById("password")?.addEventListener("focus", () => changeLockIcon(password));
+    document.getElementById("password")?.addEventListener("input", checkPasswordStrength);
+  
+    document.getElementById("confirm_password")?.addEventListener("focus", () => changeLockIcon(confirm_password));
+    document.getElementById("confirm_password")?.addEventListener("keyup", validateConfirmedPassword);
+  
+    document.getElementById("passwordIcon")?.addEventListener("click", () => togglePassword("password"));
+    document.getElementById("confirmPasswordIcon")?.addEventListener("click", () => togglePassword("confirm_password"));
+  
+    document.getElementById("privacyPolicyCheckbox")?.addEventListener("click", (e) => togglePrivacyPolicyCheckbox(e.currentTarget));
+  
+    document.getElementById("backToLoginBtn")?.addEventListener("click", () => {
+      window.location.href = ROUTES.login;
+    });
+  
+    document.getElementById("privacyPolicyBtn")?.addEventListener("click", () => {
+      window.location.href = STATIC_IMG + "../privacyPolicyLogin.html?ref=signup";
+    });
+  
+    document.getElementById("legalNoticeBtn")?.addEventListener("click", () => {
+      window.location.href = STATIC_IMG + "../legalNoticeLogin.html?ref=signup";
+    });
+  });
+  

@@ -2,119 +2,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOIN</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOIN</title>
 
-    <link rel="icon" type="image/vnd.icon" href="{% static 'img/join.ico' %}">
+  <!-- Favicon -->
+  <link rel="icon" type="image/vnd.icon" href="{% static 'img/join.ico' %}">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/board.css' %}">
-    <link rel="stylesheet" href="{% static 'css/summary.css' %}">
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
-    <link rel="stylesheet" href="{% static 'css/addTask.css' %}">
-    <link rel="stylesheet" href="{% static 'css/contacts.css' %}">
-    <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}">
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/board.css' %}">
+  <link rel="stylesheet" href="{% static 'css/summary.css' %}">
+  <link rel="stylesheet" href="{% static 'css/register.css' %}">
+  <link rel="stylesheet" href="{% static 'css/addTask.css' %}">
+  <link rel="stylesheet" href="{% static 'css/contacts.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}">
 
-    <!-- JS -->
-    <script src="{% static 'js/routes.js' %}"></script>
-    <script>
+  <!-- JS: Routes -->
+  <script src="{% static 'js/routes.js' %}"></script>
+  <script>
     const STATIC_IMG = "{% static 'img/' %}";
-        Object.assign(ROUTES, {
-          login: "{% url 'login' %}",
-          signup: "{% url 'signup' %}",
-          board: "{% url 'board' %}",
-          contacts: "{% url 'contacts' %}",
-          summary: "{% url 'index' %}",
-          help: "{% url 'help' %}",
-          privacyPolicy: "{% url 'privacy-policy' %}",
-          legalNotice: "{% url 'legal-notice' %}",
-          addTask: "{% url 'add-task' %}",
-          addTaskPopup: "{% url 'add-task-popup' %}",
-        });
-    </script>
-    <script type="module" src="{% static 'js/config.js' %}"></script>
-    <script type="module" src="{% static 'js/signup.js' %}"></script>
+    Object.assign(ROUTES, {
+      login: "{% url 'login' %}",
+      signup: "{% url 'signup' %}",
+      board: "{% url 'board' %}",
+      contacts: "{% url 'contacts' %}",
+      summary: "{% url 'index' %}",
+      help: "{% url 'help' %}",
+      privacyPolicy: "{% url 'privacy-policy' %}",
+      legalNotice: "{% url 'legal-notice' %}",
+      addTask: "{% url 'add-task' %}",
+      addTaskPopup: "{% url 'add-task-popup' %}",
+    });
+  </script>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="{% static 'js/config.js' %}"></script>
+  <script type="module" src="{% static 'js/signup.js' %}"></script>
 </head>
 
 <body>
-<main class="signupContainer"> 
+  <main class="signupContainer">
     <div class="signupHeader">
-        <img src="{% static 'img/logoNegative.png' %}"> 
-    </div>     
+      <img src="{% static 'img/logoNegative.png' %}" alt="JOIN Logo">
+    </div>
 
     <div class="signupContent">
-        <div class="headlineContainer"> 
-            <button class="goBackButton" onclick="window.location.href='{% url 'login' %}'">
-                <div class="imageContainer"></div>
-            </button>
-            <div style="margin-left: -45px;" class="signupHeadline">
-                <h1 class="h1Login">Sign up</h1> 
-                <div class="seperator"></div>
-            </div>   
+      <div class="headlineContainer">
+        <button class="goBackButton" id="backToLoginBtn">
+          <div class="imageContainer"></div>
+        </button>
+
+        <div class="signupHeadline" style="margin-left: -45px;">
+          <h1 class="h1Login">Sign up</h1>
+          <div class="seperator"></div>
+        </div>
+      </div>
+
+      <form class="loginForm" id="signupForm">
+        <div class="inputField">
+          <input class="input" type="text" id="name" required placeholder="Name" autocomplete="name">
+          <img class="inputImage" src="{% static 'img/person.svg' %}" alt="Person icon">
         </div>
 
-        <form class="loginForm" onsubmit="addUser(event); return false;">
-            <div class="inputField">
-                <input class="input" type="name" required id="name" placeholder="Name" autocomplete="name">
-                <img class="inputImage" src="{% static 'img/person.svg' %}">
-            </div>
+        <div class="inputField">
+          <input class="input user-email" type="email" id="email" required placeholder="Email" autocomplete="email">
+          <img class="inputImage" src="{% static 'img/mail.svg' %}" alt="Mail icon">
+        </div>
+        <div class="msgError" id="msgBoxValidateEmail"></div>
 
-            <div class="inputField">
-                <input class="input user-email" type="email" required id="email" placeholder="Email" autocomplete="email" 
-                    onkeyup="validateEmailAddress()" onblur="checkEmailExistence()">
-                <img class="inputImage" src="{% static 'img/mail.svg' %}">
-            </div>
-            <div class="msgError" id="msgBoxValidateEmail"></div>
+        <div class="inputField">
+          <input class="input" type="password" id="password" required placeholder="Password" minlength="8" autocomplete="new-password">
+          <img class="inputImage" id="passwordIcon" src="{% static 'img/lock.svg' %}" alt="Lock icon">
+        </div>
+        <div class="msgError" id="passwordStrengthMessage"></div>
 
-            <div class="inputField">
-                <input class="input" type="password" required id="password" placeholder="Password" minlength="8" autocomplete="new-password"
-                    onfocus="changeLockIcon(this)"
-                    oninput="checkPasswordStrength()">
-                <img onclick="togglePassword('password')" class="inputImage" id="passwordIcon" src="{% static 'img/lock.svg' %}">
-            </div>  
-            <div class="msgError" id="passwordStrengthMessage"></div>          
+        <div class="inputField">
+          <input class="input" type="password" id="confirm_password" required placeholder="Confirm Password" autocomplete="new-password">
+          <img class="inputImage" id="confirmPasswordIcon" src="{% static 'img/lock.svg' %}" alt="Lock icon">
+        </div>
+        <div class="msgError" id="passwordMatchMessage"></div>
+        <div id="msgBox"></div>
 
-            <div class="inputField">
-                <input class="input" type="password" required id="confirm_password" placeholder="Confirm Password" autocomplete="new-password"  
-                    onfocus="changeLockIcon(this)"   
-                    onkeyup="validateConfirmedPassword()">
-                <img onclick="togglePassword('confirm_password')" class="inputImage" id="confirmPasswordIcon" src="{% static 'img/lock.svg' %}">
-            </div>
-            <div class="msgError" id="passwordMatchMessage"></div>
-            <div id="msgBox"></div>
+        <div class="checkboxContainerSignup">
+          <button type="button" class="checkbox" id="privacyPolicyCheckbox">
+            <img class="checkboxImage"
+                 src="{% static 'img/Rectangle5.svg' %}"
+                 data-checked="{% static 'img/checked.svg' %}"
+                 data-unchecked="{% static 'img/Rectangle5.svg' %}">
+          </button>
+          <span>
+            I accept the
+            <a class="privacy-policy-link" href="{% static 'privacyPolicyLogin.html' %}?ref=signup">Privacy Policy</a>
+          </span>
+          <input type="checkbox" class="realCheckbox" hidden>
+        </div>
 
-            <div class="checkboxContainerSignup">
-                <button type="button" class="checkbox" onclick="togglePrivacyPolicyCheckbox(this);">
-                    <img class="checkboxImage" 
-                         src="{% static 'img/Rectangle5.svg' %}" 
-                         data-checked="{% static 'img/checked.svg' %}" 
-                         data-unchecked="{% static 'img/Rectangle5.svg' %}">
-                </button>
-                <span>
-                    I accept the 
-                    <a class="privacy-policy-link" href="{% static 'privacyPolicyLogin.html' %}?ref=signup">Privacy Policy</a>
-                </span>
-                <input type="checkbox" class="realCheckbox" hidden>
-            </div>                         
-
-            <div class="buttonContainer">
-                <button type="submit" class="blueBtn btn-Sign-up">Sign up</button>
-            </div> 
-        </form>
-    </div> 
+        <div class="buttonContainer">
+          <button type="submit" class="blueBtn btn-Sign-up">Sign up</button>
+        </div>
+      </form>
+    </div>
 
     <div class="legalNotesNegative">
-        <button onclick="window.location.href='{% static 'privacyPolicyLogin.html' %}?ref=signup'">Privacy Policy</button>
-        <button onclick="window.location.href='{% static 'legalNoticeLogin.html' %}?ref=signup'">Legal Notice</button>
+      <button id="privacyPolicyBtn">Privacy Policy</button>
+      <button id="legalNoticeBtn">Legal Notice</button>
     </div>
 
     <div id="signupModal" class="modal">
-        <div class="modal-content"> 
-            <p>You Signed Up successfully</p>
-        </div>
-    </div> 
-</main>
+      <div class="modal-content">
+        <p>You Signed Up successfully</p>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

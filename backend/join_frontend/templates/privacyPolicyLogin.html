@@ -3,67 +3,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JOIN</title>
-  <link rel="icon" type="image/vnd.icon" href="{% static 'img/join.ico' %}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/board.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/summary.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/addTask.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/contacts.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/privacy.css' %}" />
   <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}" />
-
-  <!-- JavaScript-Variablen für Navigation -->
+  
+  <script src="{% static 'js/routes.js' %}"></script>
   <script>
-    const PRIVACY_URL = "{% static 'privacyPolicyLogin.html' %}";
-    const LEGAL_URL = "{% static 'legalNoticeLogin.html' %}";
+    const STATIC_IMG = "{% static 'img/' %}";
     const LOGIN_URL = "{% url 'login' %}";
+    const PRIVACY_URL = "{% url 'privacy-policy' %}";
+    const LEGAL_URL = "{% url 'legal-notice' %}";
   </script>
-
-  <!-- JS -->
-  <script src="{% static 'js/script.js' %}"></script>
-  <script src="{% static 'js/summary.js' %}"></script>
-  <script src="{% static 'js/contacts_part1.js' %}"></script>
-  <script src="{% static 'js/contacts_part2.js' %}"></script>
-  <script src="{% static 'js/privacy_legal.js' %}"></script>
-  <script src="{% static 'js/signup.js' %}"></script>
-  <script src="{% static 'js/login.js' %}"></script>
-  <script src="{% static 'js/storage.js' %}"></script>
-  <script src="{% static 'js/addTask_part1.js' %}"></script>
-  <script src="{% static 'js/addTask_part2.js' %}"></script>
-  <script src="{% static 'js/addTask_part3.js' %}"></script>
-  <script src="{% static 'js/board_part1.js' %}"></script>
-  <script src="{% static 'js/board_part2.js' %}"></script>
-  <script src="{% static 'js/templates.js' %}"></script>
+  <script type="module" src="{% static 'js/privacy_policy.events.js' %}"></script>
 </head>
-
 <body id="body">
   <div>
     <div class="headline">
-      <img class="navLogo" src="{% static 'img/logo white.svg' %}" alt="logo" onclick="window.location.href = LOGIN_URL">
+      <img id="navLogo" class="navLogo" src="/static/img/logo white.svg" alt="logo">
       <div class="headline-user-info">
         <p>Kanban Project Management Tool</p>
       </div>
     </div>
-  </div> 
-    <div class="main-container-Legal">
-        <div class="navigation">
-          <div class="navigation-legal" onclick="clickedLegalPart()">
-            <div id="navPrivacyPolicy" class="navigation-legal-clicked" onclick="navigateTo(PRIVACY_URL)">Privacy Policy</div>
-            <div id="navLegalNotice" onclick="navigateTo(LEGAL_URL)">Legal Notice</div>
-          </div>
-        </div>
+  </div>
 
-        <div class="content" id="content">
-            <main class="templateMainContainer">
-                <div class="topHeadline">
-                    <h1 class="pp-h1">Privacy Policy</h1>
-                    <button class="goBackButton" onclick="goBack()" aria-label="Zurück">
-                        <div class="imageContainer"></div>
-                    </button>
+  <div class="main-container-Legal">
+    <div class="navigation">
+      <div class="navigation-legal">
+        <div id="navPrivacyPolicy" class="navigation-legal-clicked">Privacy Policy</div>
+        <div id="navLegalNotice">Legal Notice</div>
+      </div>
+    </div>
+
+    <div class="content" id="content">
+      <main class="templateMainContainer">
+        <div class="topHeadline">
+          <h1 class="pp-h1">Privacy Policy</h1>
+          <button class="goBackButton" id="goBackBtn" aria-label="Zurück">
+            <div class="imageContainer"></div>
+          </button>
                 </div>
                 <h2 class="pp-h2">1. An overview of data protection</h2>
                 <h3 class="pp-h3">General information</h3>
