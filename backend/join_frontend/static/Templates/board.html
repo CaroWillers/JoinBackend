@@ -5,14 +5,14 @@
         <input id="search" class="search-input" type="text" placeholder="Find Task">
         <div class="search-boder"></div>
         <div class="search-btn-container" id="searchBtn">
-          <img class="search-btn-normal" src="/static/img/search-btn.svg' %}" alt="search icon">
-          <img class="search-btn-hover" src="/static/img/search-button-hover.svg' %}" alt="search icon">
-          <img class="search-btn-click" src="/static/img/search-button-clicked.svg' %}" alt="search icon">
+          <img class="search-btn-normal" src="{% static 'img/search-btn.svg' %}" alt="search icon">
+          <img class="search-btn-hover" src="{% static 'img/search-button-hover.svg' %}" alt="search icon">
+          <img class="search-btn-click" src="{% static 'img/search-button-clicked.svg' %}" alt="search icon">
         </div> 
       </div>
       <button class="blueBtn add-btn-top" id="boardAddTaskBtn">
         Add task 
-        <img src="/static/img/plus-icon.svg' %}" alt="plus icon">
+        <img src="{% static 'img/plus-icon.svg' %}" alt="plus icon">
       </button>
     </div>
   
@@ -24,9 +24,9 @@
         <div class="board-header">
           <h3>To do</h3>
           <div class="add-btn-container" data-column="todo">
-            <img class="add-btn-board" src="/static/img/plus-button.svg' %}" alt="plus icon">
-            <img class="add-btn-board-hover" src="/static/img/plus-button-hover.svg' %}" alt="plus icon">
-            <img class="add-btn-board-click" src="/static/img/plus-button-clicked.svg' %}" alt="plus icon">
+            <img class="add-btn-board" src="{% static 'img/plus-button.svg' %}" alt="plus icon">
+            <img class="add-btn-board-hover" src="{% static 'img/plus-button-hover.svg' %}" alt="plus icon">
+            <img class="add-btn-board-click" src="{% static 'img/plus-button-clicked.svg' %}" alt="plus icon">
           </div>
         </div>
         <div id="todo" class="card-container" data-status="todo">
@@ -39,9 +39,9 @@
         <div class="board-header">
           <h3>In progress</h3>
           <div class="add-btn-container" data-column="progress">
-            <img class="add-btn-board" src="/static/img/plus-button.svg' %}" alt="plus icon">
-            <img class="add-btn-board-hover" src="/static/img/plus-button-hover.svg' %}" alt="plus icon">
-            <img class="add-btn-board-click" src="/static/img/plus-button-clicked.svg' %}" alt="plus icon">
+            <img class="add-btn-board" src="{% static 'img/plus-button.svg' %}" alt="plus icon">
+            <img class="add-btn-board-hover" src="{% static 'img/plus-button-hover.svg' %}" alt="plus icon">
+            <img class="add-btn-board-click" src="{% static 'img/plus-button-clicked.svg' %}" alt="plus icon">
           </div>
         </div>
         <div id="progress" class="card-container" data-status="progress">
@@ -54,9 +54,9 @@
         <div class="board-header">
           <h3>Await feedback</h3>
           <div class="add-btn-container" data-column="feedback">
-            <img class="add-btn-board" src="/static/img/plus-button.svg' %}" alt="plus icon">
-            <img class="add-btn-board-hover" src="/static/img/plus-button-hover.svg' %}" alt="plus icon">
-            <img class="add-btn-board-click" src="/static/img/plus-button-clicked.svg' %}" alt="plus icon">
+            <img class="add-btn-board" src="{% static 'img/plus-button.svg' %}" alt="plus icon">
+            <img class="add-btn-board-hover" src="{% static 'img/plus-button-hover.svg' %}" alt="plus icon">
+            <img class="add-btn-board-click" src="{% static 'img/plus-button-clicked.svg' %}" alt="plus icon">
           </div>
         </div>
         <div id="feedback" class="card-container" data-status="feedback">

@@ -1,4 +1,4 @@
-import { API_URL } from './config.js';
+import { API_URL } from '../config.js';
 
 const avatarColors = [
     "rgb(255,122,0)", "rgb(255,70,70)", "rgb(147,39,255)",

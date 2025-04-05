@@ -1,6 +1,6 @@
-import { cards } from "./board-tasks.js"; 
 import { greetUser } from "./script.js";
 import { initSummaryEvents } from './summary.events.js';
+import { cards } from './board/board-tasks.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initSummaryEvents();

@@ -101,23 +101,42 @@
       addTaskPopup: "{% url 'add-task-popup' %}"
     };
   </script>
- 
-<!-- MODULES --> 
+  
+<!-- MODULES -->
 <script type="module" src="{% static 'js/config.js' %}"></script>
-<script type="module" src="{% static 'js/routes.js' %}"></script> 
-<script type="module" src="{% static 'js/task-utils.js' %}"></script>
+<script type="module" src="{% static 'js/routes.js' %}"></script>  
+<script type="module" src="{% static 'js/events.js' %}"></script> 
 <script type="module" src="{% static 'js/template-loader.js' %}"></script>
-<script type="module" src="{% static 'js/contacts.service.js' %}"></script>
-<script type="module" src="{% static 'js/contacts.ui.js' %}"></script>  
-<script type="module" src="{% static 'js/board-ui.js' %}"></script>
-<script type="module" src="{% static 'js/board-tasks.js' %}"></script>
-<script type="module" src="{% static 'js/board-dnd.js' %}"></script>
-<script type="module" src="{% static 'js/task-api.js' %}"></script>
-<script type="module" src="{% static 'js/task-form.js' %}"></script>
-<script type="module" src="{% static 'js/task-subtasks.js' %}"></script>
+
+<!-- CONTACTS -->
+<script type="module" src="{% static 'js/contacts/contacts.service.js' %}"></script>
+<script type="module" src="{% static 'js/contacts/contacts.ui.js' %}"></script>  
+<script type="module" src="{% static 'js/contacts/contacts.events.js' %}"></script>
+
+<!-- BOARD -->
+<script type="module" src="{% static 'js/board/board.events.js' %}"></script>
+<script type="module" src="{% static 'js/board/board-popup.js' %}"></script>
+<script type="module" src="{% static 'js/board/board-templates.js' %}"></script>
+<script type="module" src="{% static 'js/board/board-tasks.js' %}"></script>
+<script type="module" src="{% static 'js/board/board-dnd.js' %}"></script>
+
+<!-- TASKS -->
+<script type="module" src="{% static 'js/tasks/task-api.js' %}"></script>
+<script type="module" src="{% static 'js/tasks/task-form.js' %}"></script>
+<script type="module" src="{% static 'js/tasks/task-subtasks.js' %}"></script>
+<script type="module" src="{% static 'js/tasks/task-popup.js' %}"></script>
+<script type="module" src="{% static 'js/tasks/task-utils.js' %}"></script> 
+<script type="module" src="{% static 'js/tasks/task-form.events.js' %}"></script>
+
+<!-- SUMMARY -->
 <script type="module" src="{% static 'js/summary.js' %}"></script> 
+
+<!-- AUTH -->
 <script type="module" src="{% static 'js/login.js' %}"></script>
 <script type="module" src="{% static 'js/signup.js' %}"></script>
+
+<!-- MAIN SCRIPT -->
 <script type="module" src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>

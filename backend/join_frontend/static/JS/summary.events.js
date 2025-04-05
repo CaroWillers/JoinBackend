@@ -1,4 +1,4 @@
-import { loadBoard } from './board-tasks.js';
+import { loadBoard } from './board/board-tasks.js'; 
 
 export function initSummaryEvents() {
   document.getElementById('btnUrgent')?.addEventListener('click', loadBoard);
